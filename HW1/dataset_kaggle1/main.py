@@ -12,7 +12,7 @@ error_type=arguments[6][2:]
 train_data=pandas.read_csv(train_dataset)
 test_data=pandas.read_csv(test_dataset)
 
-# Split the tree into two halves given the column and value to be used for splitting
+# Split the tree into two given the column and value to be used for splitting
 def split_data(column_num, value, data):
     left, right = list(), list()
     for record in data:
@@ -56,7 +56,7 @@ def cost_func(groups):  # , resultvalues):
 def best_split(data):
     output_values = list(set(d[-1] for d in data))
     best_column, best_value, best_cost, best_groups = 999, 999, 999, None
-    for column_num in range(len(data[0]) - 1):
+    for column_num in range(len(data[0]) : - 1):
         for record in data:
             groups = split_data(column_num, record[column_num], data)  # calls split data properly
             cost = gini_index(groups, output_values)
