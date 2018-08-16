@@ -1,16 +1,9 @@
 import sys
-import pandas as pandas
+import pandas as pd
 import numpy as np
 import csv
 
-arguments = sys.argv[1:]
-train_dataset=arguments[1]
-test_dataset=arguments[3]
-min_leaf_size=arguments[5]
-error_type=arguments[6][2:]
 
-train_data=pandas.read_csv(train_dataset)
-test_data=pandas.read_csv(test_dataset)
 
 # Split the tree into two given the column and value to be used for splitting
 def split_data(column_num, value, data):
@@ -45,11 +38,23 @@ def gini_index(groups, classes):
 
 
 # Calculate the Cost function for a split dataset
-def cost_func(groups):  # , resultvalues):
-    '''
-    update the cost function to suit for the continuous variable
-    '''
-    return cost
+def sum_square_error(groups):
+    sse=0;
+    for group in groups:
+    	mean=group.mean(axis=0)[8];
+    	for row in group.iterrows():
+    		sse+=(row[1]["output"]-mean)^2;
+
+    return sse
+
+ def absolute_error(groups):
+ 	ae=0;
+    for group in groups:
+    	mean=group.mean(axis=0)[8];
+    	for row in group.iterrows():
+    		ae+=abs(row[1]["output"]-mean)
+
+ 	return ae
 
 
 # Select the best split value for the dataset returns the node ( containing the split value column, and the two groups)
@@ -140,14 +145,16 @@ def print_tree(node, depth=0):
 
 '''Main Program'''
 
-with open('toy_dataset.csv', 'r') as file:
-    data_iter = csv.reader(file)
-    data = [d for d in data_iter]
+arguments = sys.argv[1:]
+train_dataset=arguments[1]
+test_dataset=arguments[3]
+min_leaf_size=arguments[5]
+error_type=arguments[6][2:]
 
-del (data[0])
-dataset = [[float(d) for d in dat] for dat in data]
+train_data=pd.read_csv(train_dataset, header=0)
+test_data=pd.read_csv(test_dataset, header=0)
 
-rootnode = build_tree(dataset, 4, 1)
+rootnode = build_tree(train_data, 4, 1)
 print_tree(rootnode)
 
 
