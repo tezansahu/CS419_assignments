@@ -194,5 +194,5 @@ for row in test_data.iterrows():
     i+=1
 output['Id']=output['Id'].astype(int)
 output['output']=ooutput['output'].round().astype(int)
-output.to_csv('output.csv', encoding='utf-11', index=False)
+output.to_csv('output.csv', encoding='utf-8', index=False)
 

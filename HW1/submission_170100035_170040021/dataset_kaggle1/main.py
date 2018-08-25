@@ -21,13 +21,13 @@ def mean_square_error(lc, rc):
 	n_tot=len(lc)+len(rc)
 	group_sum_sqr=0
 
-	mean_lc=lc.mean(axis=0)[11];
+	mean_lc=lc.mean(axis=0)[8];
 	for row in lc.iterrows():
 		group_sum_sqr+=(row[1]["output"]-mean_lc)**2;
 	mse+=len(lc)*group_sum_sqr;
 
 	group_sum_sqr=0
-	mean_rc=rc.mean(axis=0)[11];
+	mean_rc=rc.mean(axis=0)[8];
 	for row in rc.iterrows():
 		group_sum_sqr+=(row[1]["output"]-mean_rc)**2;
 	mse+=len(rc)*group_sum_sqr;
@@ -39,11 +39,11 @@ def absolute_error(lc, rc):
 	# # print("Calling absolute_error")
 	ae=0;
 	
-	mean=lc.mean(axis=0)[11];
+	mean=lc.mean(axis=0)[8];
 	for row in lc.iterrows():
 		ae+=abs(row[1]["output"]-mean)
 
-	mean=rc.mean(axis=0)[11];
+	mean=rc.mean(axis=0)[8];
 	for row in rc.iterrows():
 		ae+=abs(row[1]["output"]-mean)
 	return ae
@@ -73,7 +73,7 @@ def create_leaf(group):
 	# print("Calling create_leaf")
 	#nodeval = sum([g[-1] for g in group]) / len(group)
     #return nodeval
-	mean=group.mean(axis=0)[11];
+	mean=group.mean(axis=0)[8];
 	return {'column': None, 'value': None, 'left_child': None, 'right_child': None, 'prediction':mean}
 
 
@@ -184,7 +184,7 @@ train_data=pd.read_csv(train_dataset, header=0)
 test_data=pd.read_csv(test_dataset, header=0)
 
 print("Starting tree building")
-rootnode = build_tree(train_data[0:200], 6, min_leaf_size, loss_function)
+rootnode = build_tree(train_data, 6, min_leaf_size, loss_function)
 
 print("Predicting...")
 i=1
@@ -193,6 +193,5 @@ for row in test_data.iterrows():
     output=output.append({'Id':i, 'output':predict_output(rootnode, row[1])}, ignore_index=True)
     i+=1
 output['Id']=output['Id'].astype(int)
-output['output']=ooutput['output'].round().astype(int)
-output.to_csv('output.csv', encoding='utf-11', index=False)
+output.to_csv('output.csv', encoding='utf-8', index=False)
 
