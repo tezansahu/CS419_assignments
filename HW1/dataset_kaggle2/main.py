@@ -184,7 +184,7 @@ train_data=pd.read_csv(train_dataset, header=0)
 test_data=pd.read_csv(test_dataset, header=0)
 
 print("Starting tree building")
-rootnode = build_tree(train_data, 6, min_leaf_size, loss_function)
+rootnode = build_tree(train_data[0:200], 6, min_leaf_size, loss_function)
 
 print("Predicting...")
 i=1
@@ -193,5 +193,6 @@ for row in test_data.iterrows():
     output=output.append({'Id':i, 'output':predict_output(rootnode, row[1])}, ignore_index=True)
     i+=1
 output['Id']=output['Id'].astype(int)
+output['output']=ooutput['output'].round().astype(int)
 output.to_csv('output.csv', encoding='utf-8', index=False)
 
