@@ -3,15 +3,21 @@ import numpy as np
 
 def square_hinge_loss(targets, outputs):
   # Write thee square hinge loss here
-  return 1.0
+  targets[targets==0]=-1
+  func=np.multiply(targets, outputs)
+  return np.sum((1-func[np.where(func<1)])**2)
 
 def logistic_loss(targets, outputs):
   # Write thee logistic loss loss here
-  return 1.0
+  targets[targets==0]=-1
+  func=np.multiply(targets, outputs)
+  return  np.sum(np.log(1+np.exp(-func)))
 
 def perceptron_loss(targets, outputs):
   # Write thee perceptron loss here
-  return 1.0
+  targets[targets==0]=-1
+  func=np.multiply(targets, outputs)
+  return -np.sum(func[np.where(func<0)])
 
 def L2_regulariser(weights):
     # Write the L2 loss here
