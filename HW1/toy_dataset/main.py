@@ -24,15 +24,13 @@ def mean_square_error(lc, rc):
 	mean_lc=lc.mean(axis=0)[2];
 	for row in lc.iterrows():
 		group_sum_sqr+=(row[1]["Power(output)"]-mean_lc)**2;
-	mse+=len(lc)*group_sum_sqr;
+	mse+=group_sum_sqr;
 
 	group_sum_sqr=0
 	mean_rc=rc.mean(axis=0)[2];
 	for row in rc.iterrows():
 		group_sum_sqr+=(row[1]["Power(output)"]-mean_rc)**2;
-	mse+=len(rc)*group_sum_sqr;
-
-	mse/=n_tot
+	mse+=group_sum_sqr;
 	return mse
 
 def absolute_error(lc, rc):
@@ -53,6 +51,7 @@ def absolute_error(lc, rc):
 def best_split(data, loss_function):
     # # print("Calling best_split")
     best_column, best_value, best_cost, best_groups = None, float('inf'), float("inf"), None
+    cost=0
     for column in data.columns.values[:-1]:
         for row in data.iterrows():
             left_child, right_child = split_data(column, row[1][column], data)  # calls split data properly
@@ -184,7 +183,7 @@ train_data=pd.read_csv(train_dataset, header=0)
 test_data=pd.read_csv(test_dataset, header=0)
 
 print("Starting tree building")
-rootnode = build_tree(train_data, 6, min_leaf_size, loss_function)
+rootnode = build_tree(train_data, 10, min_leaf_size, loss_function)
 
 print("Predicting...")
 i=1
