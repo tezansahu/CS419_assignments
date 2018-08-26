@@ -43,7 +43,7 @@ def get_objective_function(trainx,trainy,loss_type, regularizer_type, loss_weigh
     if regularizer_type != None:
 
         regularizer_function = utils.regularizer_functions[regularizer_type]
-           def objective_function(weights):
+    def objective_function(weights):
         loss = 0
         
         inputs, targets = trainx,trainy
