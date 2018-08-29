@@ -21,11 +21,11 @@ def perceptron_loss(targets, outputs):
 
 def L2_regulariser(weights):
     # Write the L2 loss here
-    return 0.0
+    return np.sum(np.multiply(weights, weights))
 
 def L4_regulariser(weights):
     # Write the L4 loss here
-    return 0.0
+    return np.sum(np.power(weights, 4))
 
 def square_hinge_grad(weights,inputs, targets, outputs):
   # Write thee square hinge loss gradient here
