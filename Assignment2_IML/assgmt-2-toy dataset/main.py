@@ -139,8 +139,10 @@ def get_data(data_file):
 def main(args):
     train_data_loader = DataLoader(args.train_data_file, args.batch_size)
     test_data = get_data(args.test_data_file)
-
+    print("Got files")
+    print("Started training")
     trained_model_parameters = train(train_data_loader, args.loss_type, args.regularizer_type, args.loss_weight)
+    print("Predicting outputs")
     test_data_output = test(test_data, trained_model_parameters)
 
     write_csv_file(test_data_output, "output.csv")
