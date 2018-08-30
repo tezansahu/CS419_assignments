@@ -40,7 +40,13 @@ def square_hinge_grad(weights,inputs, targets, outputs):
 
 def logistic_grad(weights,inputs, targets, outputs):
   # Write thee logistic loss loss gradient here
-    return 1.00
+  targets[targets==0]=-1
+  func=np.multiply(targets, outputs)
+  grad=np.zeros(inputs.shape[1])
+  for i in range(len(targets)):
+      grad[:-1]=grad[:-1] - (targets[i]*inputs[i][:-1]*np.exp(-func[i]))/(1+np.exp(-func[i]))
+      grad[-1]=grad[-1] - (targets[i]*np.exp(-func[i]))/(1+np.exp(-func[i]))
+  return grad
 
 def perceptron_grad(weights,inputs, targets, outputs):
   # Write thee perceptron loss gradient here
