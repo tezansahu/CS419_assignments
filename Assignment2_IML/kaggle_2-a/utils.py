@@ -34,8 +34,7 @@ def square_hinge_grad(weights,inputs, targets, outputs):
   grad=np.zeros(inputs.shape[1])
   for i in range(len(targets)):
       if func[i]<1:
-          grad[:-1]=grad[:-1] - 2*targets[i]*inputs[i][:-1]*(1-func[i])
-          grad[-1]=grad[-1]-2*targets[i]*(1-func[i])
+          grad[:]=grad[:] - 2*targets[i]*inputs[i][:]*(1-func[i])
   return grad
 
 def logistic_grad(weights,inputs, targets, outputs):
@@ -44,8 +43,7 @@ def logistic_grad(weights,inputs, targets, outputs):
   func=np.multiply(targets, outputs)
   grad=np.zeros(inputs.shape[1])
   for i in range(len(targets)):
-      grad[:-1]=grad[:-1] - (targets[i]*inputs[i][:-1]*np.exp(-func[i]))/(1+np.exp(-func[i]))
-      grad[-1]=grad[-1] - (targets[i]*np.exp(-func[i]))/(1+np.exp(-func[i]))
+      grad[:]=grad[:] - (targets[i]*inputs[i][:]*np.exp(-func[i]))/(1+np.exp(-func[i]))
   return grad
 
 def perceptron_grad(weights,inputs, targets, outputs):
@@ -55,8 +53,7 @@ def perceptron_grad(weights,inputs, targets, outputs):
   grad=np.zeros(inputs.shape[1])
   for i in range(len(targets)):
       if func[i]<0:
-          grad[:-1]=grad[:-1] - targets[i]*inputs[i][:-1]
-          grad[-1]=grad[-1]-targets[i]
+          grad[:]=grad[:] - targets[i]*inputs[i][:]
   return grad
 
 def L2_grad(weights):

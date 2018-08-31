@@ -15,9 +15,9 @@ class DataLoader(object):
         data = data[:(len(data)//batch_size)*batch_size]
         np.random.shuffle(data)
         data = np.array([[float(col) for col in row.split(',')] for row in data])
-        input_data, targets = data[:, :-1], data[:, -1]
+        input_data, targets = data[:, 1:-1], data[:, -1]
         input_data = np.hstack([input_data, np.ones((len(input_data), 1), dtype=np.float32)])
-        input_data = (input_data-input_data.mean(axis=0))
+        
 
         self.num_features = input_data.shape[1]
         self.current_batch_index = 0
@@ -99,7 +99,7 @@ def train(data_loader, loss_type, regularizer_type, loss_weight):
             # to know about this function please read about scipy.optimise.minimise
             trained_model_parameters = minimize(objective_function, 
                                         start_parameters, 
-                                        method="CG", 
+                                        method="L-BFGS-B", 
                                         jac=gradient_function,
                                         options={'disp': False,
                                                  'maxiter': 1})
@@ -117,7 +117,7 @@ def test(inputs, weights):
     outputs = classify(inputs, weights)
     probs = 1/(1+np.exp(-outputs))
     # this is done to get all terms in 0 or 1 You can change for -1 and 1
-    return np.round(probs)
+    return np.round(probs).astype(int)
 
 def write_csv_file(outputs, output_file):
     # dumps the output file
@@ -143,7 +143,7 @@ def main(args):
     print("Started training")
     trained_model_parameters = train(train_data_loader, args.loss_type, args.regularizer_type, args.loss_weight)
     print("Predicting outputs")
-    test_data_output = test(test_data, trained_model_parameters)
+    test_data_output = test(test_data[:,1:], trained_model_parameters)
 
     write_csv_file(test_data_output, "output.csv")
 
