@@ -83,7 +83,7 @@ def get_gradient_function(trainx,trainy,loss_type, regularizer_type, loss_weight
     return gradient_function
 
 def train(data_loader, loss_type, regularizer_type, loss_weight):
-    initial_model_parameters = np.ones(data_loader.num_features)
+    initial_model_parameters = np.zeros(data_loader.num_features)
 
     num_epochs=1000
     for i in range(num_epochs):
@@ -103,8 +103,7 @@ def train(data_loader, loss_type, regularizer_type, loss_weight):
                                         method="BFGS", 
                                         jac=gradient_function,
                                         options={'disp': False,
-                                                 'maxiter': 1},
-                                        tol=0.000001)
+                                                 'maxiter': 1})
             loss+=objective_function(trained_model_parameters.x)
             start_parameters=trained_model_parameters.x
         # prints the batch loss
