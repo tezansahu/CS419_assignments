@@ -83,13 +83,14 @@ def get_gradient_function(trainx,trainy,loss_type, regularizer_type, loss_weight
     return gradient_function
 
 def train(data_loader, loss_type, regularizer_type, loss_weight):
-    initial_model_parameters = np.random.rand(data_loader.num_features)
+    initial_model_parameters = np.zeros(data_loader.num_features)
 
     num_epochs=1000
     for i in range(num_epochs):
         loss=0
         if(i==0):
             start_parameters=initial_model_parameters
+            prev_loss=float('inf')
         for j in range(len(data_loader)):
             trainx,trainy=data_loader[j]
             objective_function = get_objective_function(trainx,trainy,loss_type, 
@@ -99,14 +100,17 @@ def train(data_loader, loss_type, regularizer_type, loss_weight):
             # to know about this function please read about scipy.optimise.minimise
             trained_model_parameters = minimize(objective_function, 
                                         start_parameters, 
-                                        method="L-BFGS-B", 
+                                        method="BFGS", 
                                         jac=gradient_function,
                                         options={'disp': False,
                                                  'maxiter': 1})
             loss+=objective_function(trained_model_parameters.x)
             start_parameters=trained_model_parameters.x
         # prints the batch loss
+        
+        
         print("loss is  ",loss)
+        prev_loss=loss
         
     print("Optimizer information:")
     print(trained_model_parameters)
@@ -117,7 +121,10 @@ def test(inputs, weights):
     outputs = classify(inputs, weights)
     probs = 1/(1+np.exp(-outputs))
     # this is done to get all terms in 0 or 1 You can change for -1 and 1
-    return np.round(probs).astype(int)
+    outputs=np.round(probs)
+    outputs[outputs==0]==-1
+    return outputs.astype(int)
+
 
 def write_csv_file(outputs, output_file):
     # dumps the output file
@@ -159,5 +166,4 @@ if __name__=="__main__":
     args = parser.parse_args()
 
     main(args)
-
 
